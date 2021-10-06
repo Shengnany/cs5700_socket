@@ -30,4 +30,5 @@ build/
 .idea/
 gradle/
 gradlew*
+.DS_Store
 .DS_STORE
