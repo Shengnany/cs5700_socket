@@ -48,8 +48,25 @@ public class ClientHandler implements Runnable {
                 }
                 sum += sign * num;
                 String ans = String.valueOf(sum);
-                out.write(toBytes(ans.length()));
-                out.write(ans.getBytes());
+                out.write(toBytes(ans.length()),0,2);
+                byte[] exp = ans.getBytes();
+                int ansLen = exp.length;
+                for(;ansLen>0;) {
+                    byte[] bytes16 = new byte[16];
+                    if (ansLen <= 16) {
+                        for (int j = 0; j < ansLen; j++) {
+                            bytes16[j] = exp[j];
+                        }
+                        out.write(bytes16, 0, ansLen);
+                        break;
+                    } else {
+                        for (int j = 0; j < 16; j++) {
+                            bytes16[j] = exp[j];
+                        }
+                        ansLen-=16;
+                        out.write(bytes16, 0, 16);
+                    }
+                }
             }
             clientSocket.close();
         } catch (IOException e) {

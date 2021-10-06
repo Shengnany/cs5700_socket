@@ -29,8 +29,7 @@ public class EvalClient {
                 os.write(byte2);
                 byte[] exp = expressions[i].getBytes();
                 int len = exp.length;
-                System.out.println(len+"---");
-                for(int l=0;l<len;) {
+                for(;len>0;) {
                     byte[] bytes16 = new byte[16];
                     if (len <= 16) {
                         for (int j = 0; j < len; j++) {
@@ -55,7 +54,7 @@ public class EvalClient {
                 int len = new BigInteger(bytes).intValue();
                 byte[] bytes16 = new byte[16];
                 in.read(bytes16,0,len);
-                System.out.println("Results:"+new String(bytes16,0,len)+";");
+                System.out.println("Result"+i+": "+new String(bytes16,0,len)+";");
 
             }
             clientSocket.close();
