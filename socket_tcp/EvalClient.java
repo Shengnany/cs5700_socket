@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -6,6 +5,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 
@@ -26,7 +27,25 @@ public class EvalClient {
             for(int i=0; i<n;i++){
                 byte2 = toBytes(expressions[i].length());
                 os.write(byte2);
-                os.write(expressions[i].getBytes());
+                byte[] exp = expressions[i].getBytes();
+                int len = exp.length;
+                System.out.println(len+"---");
+                for(int l=0;l<len;) {
+                    byte[] bytes16 = new byte[16];
+                    if (len <= 16) {
+                        for (int j = 0; j < len; j++) {
+                            bytes16[j] = exp[j];
+                        }
+                        os.write(bytes16, 0, len);
+                        break;
+                    } else {
+                        for (int j = 0; j < 16; j++) {
+                            bytes16[j] = exp[j];
+                        }
+                        len-=16;
+                        os.write(bytes16, 0, 16);
+                    }
+                }
             }
             byte[] bytes = new byte[2];
             in.read(bytes, 0, 2);
